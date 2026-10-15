@@ -12,6 +12,7 @@ find_package(Boost CONFIG REQUIRED COMPONENTS filesystem)
 add_executable(game_mustang
   src/main.cpp
   src/core/object.cpp
+  src/core/component.cpp
 )
 
 target_include_directories(game_mustang PRIVATE
