@@ -1,1 +1,6 @@
-int main() { return 0; }
+#include "core/app.hpp"
+
+int main() {
+  Core::App* app = new Core::App();
+  return app->run();
+}

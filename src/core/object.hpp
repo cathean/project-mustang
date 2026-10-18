@@ -1,17 +1,16 @@
 #pragma once
 
 #include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp>
 #include <string>
 
 namespace Core {
 
 class Object {
  protected:
-  Object() : m_id(boost::uuids::random_generator()()) {}
+  Object();
 
  public:
-  ~Object() {}
+  virtual ~Object() = default;
 
   std::string name;
 
@@ -19,8 +18,7 @@ class Object {
   std::size_t get_hash();
   std::string to_string();
 
-  static void instantiate(Object object);
-  static void destroy(Object object);
+  virtual void destroy() = 0;
 
  private:
   boost::uuids::uuid m_id;

@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(game_mustang LANGUAGES C CXX)
 
-set(cmake_cxx_standard 17)
-set(cmake_cxx_standard_required on)
-set(cmake_export_compile_commands on)
+set(CMAKE_CXX_STANDARD  20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
 set(FETCHCONTENT_QUIET FALSE)
@@ -21,9 +22,10 @@ find_package(Boost CONFIG REQUIRED COMPONENTS filesystem)
 
 add_executable(game_mustang
   src/main.cpp
+  src/core/app.cpp
   src/core/object.cpp
   src/core/component.cpp
-  src/core/app.cpp
+  src/core/game_object.cpp
 )
 
 target_include_directories(game_mustang PRIVATE
