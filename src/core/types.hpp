@@ -4,6 +4,6 @@
 
 typedef struct Transform2D {
   Vector2 position;
-  Quaternion rotation;
-  Vector2 scale;
+  float rotation;
+  float scale;
 } Transform2D;

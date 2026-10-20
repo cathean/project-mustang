@@ -1,5 +1,9 @@
 #pragma once
 
+#include <memory>
+
+#include "world.hpp"
+
 namespace Core {
 class App {
  public:
@@ -10,6 +14,8 @@ class App {
   int run();
 
  private:
+  std::unique_ptr<World> world;
+
   void initialize();
   void update();
   void shutdown();

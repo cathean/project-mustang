@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(game_mustang LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD  20)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -23,8 +23,6 @@ find_package(Boost CONFIG REQUIRED COMPONENTS filesystem)
 add_executable(game_mustang
   src/main.cpp
   src/core/app.cpp
-  src/core/object.cpp
-  src/core/component.cpp
   src/core/game_object.cpp
 )
 

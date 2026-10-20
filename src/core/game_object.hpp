@@ -1,21 +1,29 @@
 #pragma once
 
+#include <concepts>
 #include <memory>
 #include <vector>
 
 #include "component.hpp"
 #include "object.hpp"
 #include "types.hpp"
-#include "world.hpp"
 
 namespace Core {
 
-class Component;
+class World;
 
 class GameObject : public Object {
+  friend class World;
+
+ protected:
+  void start() override;
+  void update(float dt) override;
+  void draw() override;
+  void destroy() override;
+
  public:
   GameObject();
-  ~GameObject();
+  virtual ~GameObject();
 
   World* world = nullptr;
   Transform2D transform{};
@@ -28,13 +36,8 @@ class GameObject : public Object {
     requires std::derived_from<T, Core::Component>
   T* get_component();
 
-  void update();
-  void draw();
-  void destroy() override;
-
  private:
-  bool m_dead = false;
-  std::vector<std::unique_ptr<Component>> m_components;
+  std::vector<std::unique_ptr<Component>> components_;
 };
 
 }  // namespace Core

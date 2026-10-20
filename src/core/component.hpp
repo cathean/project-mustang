@@ -10,21 +10,24 @@ namespace Core {
 class GameObject;
 
 class Component : public Object {
+  friend class GameObject;
+
  protected:
   Component() {};
+
+  void start() override { started_ = true; }
+  void update(float dt) override;
+  void draw() override;
+  void destroy() override;
 
  public:
   virtual ~Component() = default;
 
   bool enabled;
-  GameObject* owner = nullptr;
-
-  virtual void start() = 0;
-  virtual void update() = 0;
-  virtual void draw() = 0;
+  GameObject* game_object = nullptr;
 
  private:
-  bool m_started = false;
+  bool started_ = false;
 };
 
 }  // namespace Core
