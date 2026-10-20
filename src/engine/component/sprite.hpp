@@ -2,7 +2,7 @@
 
 #include <raylib.h>
 
-#include "core/component.hpp"
+#include "engine/core/component.hpp"
 #include "raylib.h"
 #include "raymath.h"
 
@@ -17,7 +17,6 @@ class Sprite : public Core::Component {
   bool flip_h = false;
   bool flip_v = false;
   Vector2 pivot = Vector2Zero();
-  Rectangle rect{};
 
   void load_texture(std::string path) { texture_ = LoadTexture(path.c_str()); }
   void load_texture(Image image) { texture_ = LoadTextureFromImage(image); }
@@ -25,10 +24,17 @@ class Sprite : public Core::Component {
 
  protected:
   void start() override { load_texture(path_); }
+
   void draw() override {
-    DrawTextureEx(texture_, game_object->transform.position,
-                  game_object->transform.rotation, game_object->transform.scale,
-                  color);
+    Rectangle rect_source =
+        Rectangle{0.0, 0.0, (float)texture_.width, (float)texture_.height};
+    Rectangle rect_dest = Rectangle{
+        game_object->transform.position.x, game_object->transform.position.y,
+        (float)texture_.width * game_object->transform.scale.x,
+        (float)texture_.height * game_object->transform.scale.y};
+
+    DrawTexturePro(texture_, rect_source, rect_dest, pivot,
+                   game_object->transform.rotation, color);
   }
 
  private:

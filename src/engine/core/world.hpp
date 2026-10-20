@@ -9,18 +9,20 @@ namespace Core {
 
 class World {
  public:
-  World();
-  ~World();
+  World() {};
+  ~World() {};
 
-  GameObject& create() {
-    game_objects_.push_back(std::make_unique<GameObject>());
+  GameObject& create(std::string name) {
+    game_objects_.push_back(std::make_unique<GameObject>(std::move(name)));
     game_objects_.back()->world = this;
     return *game_objects_.back();
   }
 
   void update(float dt) {
     for (size_t i = 0; i < game_objects_.size(); i++) {
-      game_objects_[i]->start();
+      if (!game_objects_[i]->get_started()) {
+        game_objects_[i]->start();
+      }
     }
 
     for (size_t i = 0; i < game_objects_.size(); i++) {

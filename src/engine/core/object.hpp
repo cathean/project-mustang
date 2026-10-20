@@ -18,9 +18,12 @@ class Object {
   virtual ~Object() { this->destroy(); };
 
   bool is_alive = true;
+  std::string name = "";
 
   boost::uuids::uuid get_id();
   std::size_t get_hash();
+
+  static void destroy(Object& object) { object.destroy(); }
 
  private:
   boost::uuids::uuid id_;

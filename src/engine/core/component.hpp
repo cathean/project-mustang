@@ -15,10 +15,10 @@ class Component : public Object {
  protected:
   Component() {};
 
-  void start() override { started_ = true; }
-  void update(float dt) override;
-  void draw() override;
-  void destroy() override;
+  void start() override {}
+  void update(float dt) override {}
+  void draw() override {}
+  void destroy() override {};
 
  public:
   virtual ~Component() = default;
@@ -27,7 +27,6 @@ class Component : public Object {
   GameObject* game_object = nullptr;
 
  private:
-  bool started_ = false;
 };
 
 }  // namespace Core

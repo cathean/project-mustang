@@ -3,7 +3,8 @@
 
 #include <raylib.h>
 
-#include "component.hpp"
+#include "engine/component/sprite.hpp"
+#include "game/scripts/player_controller.hpp"
 #include "world.hpp"
 
 Core::App::App() {}
@@ -22,16 +23,21 @@ void Core::App::initialize() {
   SetTargetFPS(60);
 
   world = std::make_unique<World>();
-  auto& test = world->create();
-  test.add_component<Core::Component::Sprite>("");
+  auto& test = world->create("test");
+  test.add_component<::Component::Sprite>("./parrots.png");
+  test.transform.scale = Vector2{0.2, 0.2};
+  test.add_component<::Mustang::PlayerController>();
 }
 
 void Core::App::update() {
   while (!WindowShouldClose()) {
     float dt = GetFrameTime();
+    world->update(dt);
 
     BeginDrawing();
     ClearBackground(BLUE);
+
+    world->draw();
     EndDrawing();
   }
 }

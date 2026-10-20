@@ -5,5 +5,5 @@
 typedef struct Transform2D {
   Vector2 position;
   float rotation;
-  float scale;
+  Vector2 scale;
 } Transform2D;

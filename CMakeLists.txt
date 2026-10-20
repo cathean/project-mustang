@@ -17,18 +17,28 @@ FetchContent_Declare(
   GIT_PROGRESS TRUE
 )
 FetchContent_MakeAvailable(raylib)
-find_package(spdlog REQUIRED)
+
+FetchContent_Declare(
+  spdlog
+  GIT_REPOSITORY https://github.com/gabime/spdlog.git
+  GIT_TAG v1.17.0
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable(spdlog)
+
 find_package(Boost CONFIG REQUIRED COMPONENTS filesystem)
 
 add_executable(game_mustang
   src/main.cpp
-  src/core/app.cpp
-  src/core/game_object.cpp
+  src/engine/core/app.cpp
+  src/engine/core/game_object.cpp
 )
 
 target_include_directories(game_mustang PRIVATE
   src/
-
+  src/core
+  src/component
   ${Boost_INCLUDE_DIRS}
 )
 
