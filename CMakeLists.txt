@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+
 include(FetchContent)
 set(FETCHCONTENT_QUIET FALSE)
 
@@ -17,6 +18,8 @@ FetchContent_Declare(
   GIT_PROGRESS TRUE
 )
 FetchContent_MakeAvailable(raylib)
+
+set(SUPPORT_TRACELOG OFF CACHE INTERNAL "Disable raylib trace logs")
 
 FetchContent_Declare(
   spdlog

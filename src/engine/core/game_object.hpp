@@ -32,9 +32,11 @@ class GameObject : public Object {
 
   template <typename T, typename... Args>
     requires std::derived_from<T, Core::Component>
-  T& add_component(Args&&... args) {
-    auto c = std::make_unique<T>(std::forward<Args>(args)...);
-    c->game_object = this;
+  std::weak_ptr<T> add_component(Args&&... args) {
+    std::weak_ptr<GameObject> weak_self =
+        std::static_pointer_cast<GameObject>(shared_from_this());
+    auto c = std::make_unique<T>(*this, std::forward<Args>(args)...);
+    c->game_object = weak_self;
     T& ref = *c;
     components_.push_back(std::move(c));
 

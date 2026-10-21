@@ -2,10 +2,11 @@
 
 #include <boost/uuid/random_generator.hpp>
 #include <boost/uuid/uuid.hpp>
+#include <memory>
 
 namespace Core {
 
-class Object {
+class Object : public std::enable_shared_from_this<Object> {
  protected:
   Object() : id_(boost::uuids::random_generator()()) {};
 

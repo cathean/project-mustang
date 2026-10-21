@@ -2,6 +2,8 @@
 
 #include <raylib.h>
 
+#include <memory>
+
 #include "game_object.hpp"
 #include "object.hpp"
 
@@ -13,7 +15,7 @@ class Component : public Object {
   friend class GameObject;
 
  protected:
-  Component() {};
+  Component(std::weak_ptr<GameObject>& gameobject) : gameobject(gameobject) {};
 
   void start() override {}
   void update(float dt) override {}
@@ -24,9 +26,11 @@ class Component : public Object {
   virtual ~Component() = default;
 
   bool enabled;
-  GameObject* game_object = nullptr;
+
+  GameObject& get_gameobject() { return *gameobject_.lock(); }
 
  private:
+  std::weak_ptr<GameObject>& gameobject_;
 };
 
 }  // namespace Core

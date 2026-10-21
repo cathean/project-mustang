@@ -2,7 +2,10 @@
 
 #include <raylib.h>
 
+#include <memory>
+
 #include "engine/core/component.hpp"
+#include "engine/core/game_object.hpp"
 #include "raylib.h"
 #include "raymath.h"
 
@@ -10,9 +13,14 @@ namespace Component {
 
 class Sprite : public Core::Component {
  public:
-  Sprite(std::string path) : path_(std::move(path)) {}
-  ~Sprite() { UnloadTexture(texture_); }
+  Sprite(std::unique_ptr<Core::GameObject>& game_object, std::string path)
+      : path_(std::move(path)), Component(game_object) {}
+  ~Sprite() {
+    UnloadTexture(texture_);
+    UnloadMaterial(material);
+  }
 
+  Material material{};
   Color color = WHITE;
   bool flip_h = false;
   bool flip_v = false;
@@ -38,7 +46,7 @@ class Sprite : public Core::Component {
   }
 
  private:
-  std::string path_;
+  std::string path_{};
   Texture texture_{};
 };
 

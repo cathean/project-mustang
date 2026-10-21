@@ -22,9 +22,10 @@ void Core::App::initialize() {
   InitWindow(800, 600, "Project Mustang");
   SetTargetFPS(60);
 
+  // NOTE: TEST CASE
   world = std::make_unique<World>();
   auto& test = world->create("test");
-  test.add_component<::Component::Sprite>("./parrots.png");
+  test.add_component<::Component::Sprite>("duck.jpg");
   test.transform.scale = Vector2{0.2, 0.2};
   test.add_component<::Mustang::PlayerController>();
 }
