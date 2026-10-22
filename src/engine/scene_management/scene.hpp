@@ -1,25 +1,27 @@
 #pragma once
 
+#include <boost/uuid/uuid.hpp>
 #include <memory>
 #include <string>
-#include <vector>
+#include <unordered_map>
 
 #include "engine/core/game_object.hpp"
+#include "engine/core/world.hpp"
 
 namespace SceneManagement {
 class Scene {
  public:
-  Scene(std::string name) : name(std::move(name)) {}
+  Scene(std::string name) : name_(std::move(name)) {}
   ~Scene() {}
 
-  std::string name{};
   bool is_loaded = false;
 
-  std::vector<std::unique_ptr<Core::GameObject>>& get_all_root_gameobjects() {
-    return game_objects_;
-  }
+  std::string get_name();
+  void add_world();
+  void remove_world();
 
  private:
-  std::vector<std::unique_ptr<Core::GameObject>> game_objects_;
+  std::string name_;
+  std::unordered_map<boost::uuids::uuid, std::unique_ptr<Core::World>> worlds_;
 };
 }  // namespace SceneManagement

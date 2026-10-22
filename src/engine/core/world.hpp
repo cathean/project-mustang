@@ -1,7 +1,7 @@
 #pragma once
 
-#include <algorithm>
 #include <memory>
+#include <unordered_map>
 
 #include "game_object.hpp"
 
@@ -9,40 +9,49 @@ namespace Core {
 
 class World {
  public:
-  World() {};
+  World() : id_(boost::uuids::random_generator()()) {};
   ~World() {};
 
-  GameObject& create(std::string name) {
-    game_objects_.push_back(std::make_unique<GameObject>(std::move(name)));
-    game_objects_.back()->world = this;
-    return *game_objects_.back();
+  GameObject* create(std::string name) {
+    auto go = std::make_unique<GameObject>(std::move(name));
+    auto id = go->get_id();
+    go->world = this;
+
+    auto [it, inserted] = gameobjects_.try_emplace(id, std::move(go));
+    if (!inserted) {
+      return nullptr;
+    }
+
+    return it->second.get();
   }
 
   void update(float dt) {
-    for (size_t i = 0; i < game_objects_.size(); i++) {
-      if (!game_objects_[i]->get_started()) {
-        game_objects_[i]->start();
+    for (const auto& [id, go] : gameobjects_) {
+      if (!go->get_started()) {
+        go->start();
       }
     }
 
-    for (size_t i = 0; i < game_objects_.size(); i++) {
-      game_objects_[i]->update(dt);
+    for (const auto& [id, go] : gameobjects_) {
+      go->update(dt);
     }
 
-    game_objects_.erase(
-        std::remove_if(game_objects_.begin(), game_objects_.end(),
-                       [](auto& go) { return !go->is_alive; }),
-        game_objects_.end());
+    std::erase_if(gameobjects_,
+                  [](const auto& pair) { return !pair.second->is_alive; });
   }
 
   void draw() {
-    for (auto& go : game_objects_) {
+    for (const auto& [id, go] : gameobjects_) {
       go->draw();
     }
   }
 
+  boost::uuids::uuid get_id() { return id_; }
+
  private:
-  std::vector<std::unique_ptr<GameObject>> game_objects_;
+  boost::uuids::uuid id_;
+  std::unordered_map<boost::uuids::uuid, std::unique_ptr<GameObject>>
+      gameobjects_;
 };
 
 }  // namespace Core

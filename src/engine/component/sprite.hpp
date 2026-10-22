@@ -2,8 +2,6 @@
 
 #include <raylib.h>
 
-#include <memory>
-
 #include "engine/core/component.hpp"
 #include "engine/core/game_object.hpp"
 #include "raylib.h"
@@ -13,8 +11,7 @@ namespace Component {
 
 class Sprite : public Core::Component {
  public:
-  Sprite(std::unique_ptr<Core::GameObject>& game_object, std::string path)
-      : path_(std::move(path)), Component(game_object) {}
+  Sprite(std::string path) : path_(std::move(path)) {}
   ~Sprite() {
     UnloadTexture(texture_);
     UnloadMaterial(material);
@@ -34,15 +31,16 @@ class Sprite : public Core::Component {
   void start() override { load_texture(path_); }
 
   void draw() override {
+    const auto& gameobject = get_gameobject();
     Rectangle rect_source =
         Rectangle{0.0, 0.0, (float)texture_.width, (float)texture_.height};
     Rectangle rect_dest = Rectangle{
-        game_object->transform.position.x, game_object->transform.position.y,
-        (float)texture_.width * game_object->transform.scale.x,
-        (float)texture_.height * game_object->transform.scale.y};
+        gameobject.transform.position.x, gameobject.transform.position.y,
+        (float)texture_.width * gameobject.transform.scale.x,
+        (float)texture_.height * gameobject.transform.scale.y};
 
     DrawTexturePro(texture_, rect_source, rect_dest, pivot,
-                   game_object->transform.rotation, color);
+                   gameobject.transform.rotation, color);
   }
 
  private:

@@ -2,12 +2,10 @@
 
 #include <spdlog/spdlog.h>
 
-#include <memory>
-
 Core::GameObject::GameObject(std::string name) { this->name = std::move(name); }
 
 Core::GameObject::~GameObject() {
-  for (auto& c : components_) {
+  for (const auto& [id, c] : components_) {
     c->destroy();
   }
 }
@@ -15,7 +13,7 @@ Core::GameObject::~GameObject() {
 bool Core::GameObject::get_started() { return started_; }
 
 void Core::GameObject::start() {
-  for (auto& c : components_) {
+  for (const auto& [id, c] : components_) {
     c->start();
   }
 
@@ -23,13 +21,13 @@ void Core::GameObject::start() {
 }
 
 void Core::GameObject::update(float dt) {
-  for (auto& c : components_) {
+  for (const auto& [id, c] : components_) {
     c->update(dt);
   }
 }
 
 void Core::GameObject::draw() {
-  for (auto& c : components_) {
+  for (const auto& [id, c] : components_) {
     c->draw();
   }
 }

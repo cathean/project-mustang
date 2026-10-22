@@ -1,20 +1,18 @@
 #pragma once
 
-#include <memory>
-
-#include "world.hpp"
+#include "engine/scene_management/scene_manager.hpp"
 
 namespace Core {
 class App {
  public:
-  App();
+  App() : scene_manager_(SceneManagement::SceneManager::get_instance()) {};
 
   ~App() = default;
 
   int run();
 
  private:
-  std::unique_ptr<World> world;
+  SceneManagement::SceneManager& scene_manager_;
 
   void initialize();
   void update();
