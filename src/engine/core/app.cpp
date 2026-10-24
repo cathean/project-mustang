@@ -3,7 +3,12 @@
 
 #include <raylib.h>
 
-int Core::App::run() {
+#include <memory>
+
+#include "engine/scene_management/scene_manager.hpp"
+#include "game/scenes/gameplay.hpp"
+
+int Engine::Core::App::run() {
   initialize();
   update();
   shutdown();
@@ -11,13 +16,16 @@ int Core::App::run() {
   return 0;
 }
 
-void Core::App::initialize() {
+void Engine::Core::App::initialize() {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(800, 600, "Project Mustang");
   SetTargetFPS(60);
+
+  scene_manager_.register_scene(std::make_unique<Mustang::GameplayScene>());
+  scene_manager_.load_scene("Gameplay");
 }
 
-void Core::App::update() {
+void Engine::Core::App::update() {
   while (!WindowShouldClose()) {
     float dt = GetFrameTime();
     scene_manager_.update(dt);
@@ -30,7 +38,7 @@ void Core::App::update() {
   }
 }
 
-void Core::App::shutdown() {
+void Engine::Core::App::shutdown() {
   scene_manager_.cleanup();
   CloseWindow();
 }

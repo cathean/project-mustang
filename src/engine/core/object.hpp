@@ -3,7 +3,7 @@
 #include <boost/uuid/random_generator.hpp>
 #include <boost/uuid/uuid.hpp>
 
-namespace Core {
+namespace Engine::Core {
 
 class Object {
  protected:
@@ -15,17 +15,17 @@ class Object {
   virtual void destroy() { is_alive = false; };
 
  public:
-  virtual ~Object() { this->destroy(); };
+  virtual ~Object() = default;
 
   bool is_alive = true;
   std::string name = "";
 
   boost::uuids::uuid get_id() { return id_; }
 
-  static void destroy(Object& object) { object.destroy(); }
+  static void free(Object& object) { object.destroy(); }
 
  private:
   boost::uuids::uuid id_;
 };
 
-}  // namespace Core
+}  // namespace Engine::Core

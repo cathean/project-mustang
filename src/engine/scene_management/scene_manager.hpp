@@ -1,45 +1,28 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
+#include <map>
+#include <memory>
 
-#include "scene.hpp"
+namespace Engine::SceneManagement {
 
-namespace SceneManagement {
+class Scene;
 
 class SceneManager {
  public:
+  SceneManager();
   ~SceneManager();
 
-  SceneManager(const SceneManager&) = delete;
-  SceneManager& operator=(const SceneManager&) = delete;
+  Scene& register_scene(std::unique_ptr<Scene> scene);
+  void load_scene(std::string name);
+  void load_scene(int index);
 
-  static SceneManager& get_instance() {
-    static SceneManager instance;
-    return instance;
-  }
-
-  static void register_scene(Scene* scene) {
-    auto [it, inserted] =
-        scenes_.try_emplace(scene->get_name(), std::move(scene));
-
-    if (!inserted) {
-      throw std::runtime_error("Scene already exist!");
-    }
-  }
-
-  static Scene get_current_scene() { return current_scene_; }
-
-  static void start() {}
-  static void update(float dt) {}
-  static void draw() {}
-  static void cleanup() {}
+  void update(float dt);
+  void draw();
+  void cleanup();
 
  private:
-  SceneManager();
-
-  static Scene current_scene_;
-  static std::unordered_map<std::string, std::unique_ptr<Scene>> scenes_;
+  std::map<std::string, std::unique_ptr<Scene>> scenes_;
+  Scene* current_scene_;
 };
 
-}  // namespace SceneManagement
+}  // namespace Engine::SceneManagement

@@ -35,13 +35,14 @@ find_package(Boost CONFIG REQUIRED COMPONENTS filesystem)
 add_executable(game_mustang
   src/main.cpp
   src/engine/core/app.cpp
-  src/engine/core/game_object.cpp
+  src/engine/core/gameobject.cpp
+  src/engine/core/component.cpp
+  src/engine/scene_management/scene.cpp
+  src/engine/scene_management/scene_manager.cpp
 )
 
 target_include_directories(game_mustang PRIVATE
   src/
-  src/core
-  src/component
   ${Boost_INCLUDE_DIRS}
 )
 

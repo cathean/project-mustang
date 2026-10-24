@@ -5,10 +5,10 @@
 #include <boost/uuid/uuid.hpp>
 #include <cassert>
 
-#include "game_object.hpp"
+#include "gameobject.hpp"
 #include "object.hpp"
 
-namespace Core {
+namespace Engine::Core {
 
 class GameObject;
 
@@ -16,27 +16,19 @@ class Component : public Object {
   friend class GameObject;
 
  protected:
-  Component() {};
+  Component();
 
-  void start() override {}
-  void update(float dt) override {}
-  void draw() override {}
-  void destroy() override {};
-  void set_gameobject(GameObject* gameobject) { gameobject_ = gameobject; }
+  void set_gameobject(GameObject* gameobject);
 
  public:
-  virtual ~Component() = default;
+  virtual ~Component();
 
   bool enabled = true;
 
-  GameObject& get_gameobject() {
-    assert(gameobject_ != nullptr);
-
-    return *gameobject_;
-  }
+  GameObject& get_gameobject();
 
  private:
   GameObject* gameobject_ = nullptr;
 };
 
-}  // namespace Core
+}  // namespace Engine::Core

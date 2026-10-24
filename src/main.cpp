@@ -1,6 +1,6 @@
 #include "engine/core/app.hpp"
 
 int main() {
-  Core::App* app = new Core::App();
+  Engine::Core::App* app = new Engine::Core::App();
   return app->run();
 }

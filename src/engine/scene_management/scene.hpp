@@ -1,27 +1,41 @@
 #pragma once
 
+#include <boost/uuid/random_generator.hpp>
 #include <boost/uuid/uuid.hpp>
-#include <memory>
 #include <string>
 #include <unordered_map>
 
-#include "engine/core/game_object.hpp"
-#include "engine/core/world.hpp"
+#include "scene_manager.hpp"
 
-namespace SceneManagement {
+namespace Engine::Core {
+class GameObject;
+}
+
+namespace Engine::SceneManagement {
 class Scene {
+  friend class SceneManager;
+
  public:
-  Scene(std::string name) : name_(std::move(name)) {}
-  ~Scene() {}
+  explicit Scene(std::string name);
+  virtual ~Scene();
 
   bool is_loaded = false;
 
   std::string get_name();
-  void add_world();
-  void remove_world();
+  Core::GameObject* create(std::string name);
+
+ protected:
+  virtual void initialize();
+  void update(float dt);
+  void draw();
+  virtual void cleanup() = 0;
 
  private:
+  boost::uuids::uuid id_;
   std::string name_;
-  std::unordered_map<boost::uuids::uuid, std::unique_ptr<Core::World>> worlds_;
+  std::unordered_map<boost::uuids::uuid, std::unique_ptr<Core::GameObject>>
+      gameobjects_;
+  bool is_initialized_ = false;
+  bool is_pending_loading_ = false;
 };
-}  // namespace SceneManagement
+}  // namespace Engine::SceneManagement

@@ -1,22 +1,21 @@
 #pragma once
 
-#include <concepts>
-#include <memory>
-#include <stdexcept>
 #include <unordered_map>
 
-#include "component.hpp"
+#include "engine/core/types.hpp"
 #include "object.hpp"
 #include "raymath.h"
-#include "types.hpp"
 
-namespace Core {
+namespace Engine::SceneManagement {
+class Scene;
+}
+
+namespace Engine::Core {
 
 class Component;
-class World;
 
 class GameObject : public Object {
-  friend class World;
+  friend class Engine::SceneManagement::Scene;
 
  protected:
   void start() override;
@@ -30,7 +29,7 @@ class GameObject : public Object {
   GameObject(const GameObject&) = delete;
   GameObject& operator=(const GameObject&) = delete;
 
-  World* world = nullptr;
+  SceneManagement::Scene* scene = nullptr;
   Transform2D transform{
       .position = Vector2Zero(), .rotation = 0, .scale = Vector2One()};
 
@@ -51,10 +50,6 @@ class GameObject : public Object {
 
   bool get_started();
 
-  // template <typename T>
-  //   requires std::derived_from<T, Core::Component>
-  // T* get_component() {};
-
  private:
   std::unordered_map<boost::uuids::uuid, std::unique_ptr<Component>>
       components_;
@@ -62,4 +57,4 @@ class GameObject : public Object {
   bool started_ = false;
 };
 
-}  // namespace Core
+}  // namespace Engine::Core

@@ -3,13 +3,12 @@
 #include <raylib.h>
 
 #include "engine/core/component.hpp"
-#include "engine/core/game_object.hpp"
+#include "engine/core/gameobject.hpp"
 #include "raylib.h"
-#include "raymath.h"
 
 namespace Component {
 
-class Sprite : public Core::Component {
+class Sprite : public Engine::Core::Component {
  public:
   Sprite(std::string path) : path_(std::move(path)) {}
   ~Sprite() {
@@ -21,7 +20,7 @@ class Sprite : public Core::Component {
   Color color = WHITE;
   bool flip_h = false;
   bool flip_v = false;
-  Vector2 pivot = Vector2Zero();
+  Vector2 pivot{0.5, 0.5};
 
   void load_texture(std::string path) { texture_ = LoadTexture(path.c_str()); }
   void load_texture(Image image) { texture_ = LoadTextureFromImage(image); }
@@ -29,6 +28,8 @@ class Sprite : public Core::Component {
 
  protected:
   void start() override { load_texture(path_); }
+
+  void update(float dt) override {}
 
   void draw() override {
     const auto& gameobject = get_gameobject();
@@ -39,7 +40,8 @@ class Sprite : public Core::Component {
         (float)texture_.width * gameobject.transform.scale.x,
         (float)texture_.height * gameobject.transform.scale.y};
 
-    DrawTexturePro(texture_, rect_source, rect_dest, pivot,
+    DrawTexturePro(texture_, rect_source, rect_dest,
+                   Vector2{texture_.width * pivot.x, texture_.height * pivot.y},
                    gameobject.transform.rotation, color);
   }
 
