@@ -4,6 +4,7 @@
 #include "engine/core/gameobject.hpp"
 #include "engine/scene_management/scene.hpp"
 #include "game/scripts/player_controller.hpp"
+#include "raylib.h"
 
 namespace Mustang {
 class GameplayScene : public Engine::SceneManagement::Scene {
@@ -11,14 +12,13 @@ class GameplayScene : public Engine::SceneManagement::Scene {
   GameplayScene() : Engine::SceneManagement::Scene("Gameplay") {}
   ~GameplayScene() override = default;
 
-  void initialize() override {
+  void on_initialize() override {
     auto p = create("Player");
-    p->add_component<::Component::Sprite>("parrots.png");
+    p->add_component<::Component::Sprite>("ship.png");
     p->add_component<Mustang::PlayerController>();
-
-    Engine::SceneManagement::Scene::initialize();
+    p->transform.scale = Vector2{2, 2};
   }
 
-  void cleanup() override {}
+  void on_cleanup() override {}
 };
 }  // namespace Mustang

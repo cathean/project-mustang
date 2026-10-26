@@ -25,10 +25,8 @@ class Scene {
   Core::GameObject* create(std::string name);
 
  protected:
-  virtual void initialize();
-  void update(float dt);
-  void draw();
-  virtual void cleanup() = 0;
+  virtual void on_initialize() {};
+  virtual void on_cleanup() {};
 
  private:
   boost::uuids::uuid id_;
@@ -37,5 +35,10 @@ class Scene {
       gameobjects_;
   bool is_initialized_ = false;
   bool is_pending_loading_ = false;
+
+  void initialize();
+  void update(float dt);
+  void draw();
+  void cleanup();
 };
 }  // namespace Engine::SceneManagement

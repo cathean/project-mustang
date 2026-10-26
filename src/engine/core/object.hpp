@@ -8,6 +8,7 @@ namespace Engine::Core {
 class Object {
  protected:
   Object() : id_(boost::uuids::random_generator()()) {};
+  virtual ~Object() = default;
 
   virtual void start() = 0;
   virtual void update(float dt) = 0;
@@ -15,7 +16,8 @@ class Object {
   virtual void destroy() { is_alive = false; };
 
  public:
-  virtual ~Object() = default;
+  Object(const Object&) = delete;
+  Object& operator=(const Object&) = delete;
 
   bool is_alive = true;
   std::string name = "";

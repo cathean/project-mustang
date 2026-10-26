@@ -22,7 +22,10 @@ Engine::Core::GameObject* Engine::SceneManagement::Scene::create(
   return it->second.get();
 }
 
-void Engine::SceneManagement::Scene::initialize() { is_initialized_ = true; }
+void Engine::SceneManagement::Scene::initialize() {
+  on_initialize();
+  is_initialized_ = true;
+}
 
 void Engine::SceneManagement::Scene::update(float dt) {
   for (const auto& [id, go] : gameobjects_) {
@@ -44,3 +47,5 @@ void Engine::SceneManagement::Scene::draw() {
     go->draw();
   }
 }
+
+void Engine::SceneManagement::Scene::cleanup() { on_cleanup(); }

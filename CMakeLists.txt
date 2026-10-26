@@ -46,12 +46,6 @@ target_include_directories(game_mustang PRIVATE
   ${Boost_INCLUDE_DIRS}
 )
 
-set_target_properties(game_mustang PROPERTIES
-  OUTPUT_NAME "mustang"
-  RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/bin/debug"
-  RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/bin/release"
-)
-
 target_link_libraries(game_mustang PRIVATE
   raylib
   spdlog::spdlog
@@ -60,8 +54,8 @@ target_link_libraries(game_mustang PRIVATE
 
 # Statically link libgcc and libstdc++ for GCC or Clang
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_link_options(game_mustang PRIVATE 
-    "-static-libgcc" 
+  target_link_options(game_mustang PRIVATE
+    "-static-libgcc"
     "-static-libstdc++"
     "-Wl,-Bstatic,--whole-archive" "-lwinpthread" "-Wl,--no-whole-archive"
 )

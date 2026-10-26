@@ -19,7 +19,8 @@ Engine::SceneManagement::SceneManager::register_scene(
   return *it->second;
 }
 
-void Engine::SceneManagement::SceneManager::load_scene(std::string name) {
+void Engine::SceneManagement::SceneManager::load_scene(
+    const std::string& name) {
   auto it = scenes_.find(name);
 
   if (it != scenes_.end()) {
