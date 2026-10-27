@@ -18,6 +18,7 @@ int Engine::Core::App::run() {
 
 void Engine::Core::App::initialize() {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+  ChangeDirectory(GetApplicationDirectory());
   InitWindow(800, 600, "Project Mustang");
   SetTargetFPS(60);
 

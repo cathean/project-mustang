@@ -14,7 +14,10 @@ class GameplayScene : public Engine::SceneManagement::Scene {
 
   void on_initialize() override {
     auto p = create("Player");
-    p->add_component<::Component::Sprite>("ship.png");
+    auto& sprite =
+        p->add_component<::Component::Sprite>("./assets/ships/ship.png");
+    sprite.debug_mode = true;
+
     p->add_component<Mustang::PlayerController>();
     p->transform.scale = Vector2{2, 2};
   }

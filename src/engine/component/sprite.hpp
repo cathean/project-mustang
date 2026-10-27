@@ -15,10 +15,12 @@ class Sprite : public Engine::Core::Component {
   ~Sprite() { UnloadMaterial(material); }
 
   Material material{};
+  Rectangle rect{};
   Color color = WHITE;
   bool flip_h = false;
   bool flip_v = false;
   Vector2 pivot{0.5, 0.5};
+  bool debug_mode = false;
 
   void load_texture(const std::string& path) {
     path_ = path;
@@ -36,17 +38,25 @@ class Sprite : public Engine::Core::Component {
 
     const auto& gameobject = get_gameobject();
 
-    Rectangle rect_source =
-        Rectangle{0.0, 0.0, (float)texture_->width, (float)texture_->height};
-    Rectangle rect_dest = Rectangle{
-        gameobject.transform.position.x, gameobject.transform.position.y,
-        (float)texture_->width * gameobject.transform.scale.x,
-        (float)texture_->height * gameobject.transform.scale.y};
-    Vector2 new_origin =
-        Vector2{texture_->width * pivot.x, texture_->height * pivot.y};
+    Rectangle rect_source{0.0, 0.0, (float)texture_->width,
+                          (float)texture_->height};
+    Rectangle rect_dest{gameobject.transform.position.x,
+                        gameobject.transform.position.y,
+                        (float)texture_->width * gameobject.transform.scale.x,
+                        (float)texture_->height * gameobject.transform.scale.y};
+    Vector2 new_origin{
+        texture_->width * gameobject.transform.scale.x * pivot.x,
+        texture_->height * gameobject.transform.scale.y * pivot.y};
 
     DrawTexturePro(*texture_, rect_source, rect_dest, new_origin,
                    gameobject.transform.rotation, color);
+
+    rect = {rect_dest.x - new_origin.x, rect_dest.y - new_origin.y,
+            rect_dest.width, rect_dest.height};
+
+    if (debug_mode) {
+      DrawRectangleLinesEx(rect, 1, RED);
+    }
   }
 
  private:
