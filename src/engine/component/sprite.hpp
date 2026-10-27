@@ -12,9 +12,9 @@ namespace Component {
 class Sprite : public Engine::Core::Component {
  public:
   Sprite(std::string path) : path_(std::move(path)) {}
-  ~Sprite() { UnloadMaterial(material); }
+  ~Sprite() = default;
 
-  Material material{};
+  Shader shader{};
   Rectangle rect{};
   Color color = WHITE;
   bool flip_h = false;
