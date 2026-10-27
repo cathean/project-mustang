@@ -55,6 +55,7 @@ class Sprite : public Engine::Core::Component {
             rect_dest.width, rect_dest.height};
 
     if (debug_mode) {
+      DrawText(gameobject.name.c_str(), rect.x, rect.y - 14, 12, RED);
       DrawRectangleLinesEx(rect, 1, RED);
     }
   }
