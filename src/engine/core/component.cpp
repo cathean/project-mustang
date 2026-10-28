@@ -9,11 +9,11 @@ Engine::Core::Component::~Component() = default;
 
 void Engine::Core::Component::set_gameobject(
     Engine::Core::GameObject* gameobject) {
-  gameobject_ = gameobject;
+  this->gameobject = gameobject;
 }
 
 Engine::Core::GameObject& Engine::Core::Component::get_gameobject() {
-  assert(gameobject_ != nullptr);
+  assert(gameobject != nullptr);
 
-  return *gameobject_;
+  return *gameobject;
 }

@@ -24,11 +24,9 @@ class Component : public Object {
   virtual ~Component();
 
   bool enabled = true;
+  GameObject* gameobject = nullptr;
 
   GameObject& get_gameobject();
-
- private:
-  GameObject* gameobject_ = nullptr;
 };
 
 }  // namespace Engine::Core

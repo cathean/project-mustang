@@ -17,8 +17,6 @@ class Sprite : public Engine::Core::Component {
   Shader shader{};
   Rectangle rect{};
   Color color = WHITE;
-  bool flip_h = false;
-  bool flip_v = false;
   Vector2 pivot{0.5, 0.5};
   bool debug_mode = false;
 
@@ -31,31 +29,27 @@ class Sprite : public Engine::Core::Component {
  protected:
   void start() override { load_texture(path_); }
 
-  void update(float dt) override {}
+  void update(float dt) override {
+    rect_source = {0.0, 0.0, (float)texture_->width, (float)texture_->height};
+    rect_dest = {gameobject->transform.position.x,
+                 gameobject->transform.position.y,
+                 (float)texture_->width * gameobject->transform.scale.x,
+                 (float)texture_->height * gameobject->transform.scale.y};
+    origin_offset = {
+        texture_->width * gameobject->transform.scale.x * pivot.x,
+        texture_->height * gameobject->transform.scale.y * pivot.y};
+    rect = {rect_dest.x - origin_offset.x, rect_dest.y - origin_offset.y,
+            rect_dest.width, rect_dest.height};
+  }
 
   void draw() override {
     if (texture_ == nullptr) return;
 
-    const auto& gameobject = get_gameobject();
-
-    Rectangle rect_source{0.0, 0.0, (float)texture_->width,
-                          (float)texture_->height};
-    Rectangle rect_dest{gameobject.transform.position.x,
-                        gameobject.transform.position.y,
-                        (float)texture_->width * gameobject.transform.scale.x,
-                        (float)texture_->height * gameobject.transform.scale.y};
-    Vector2 new_origin{
-        texture_->width * gameobject.transform.scale.x * pivot.x,
-        texture_->height * gameobject.transform.scale.y * pivot.y};
-
-    DrawTexturePro(*texture_, rect_source, rect_dest, new_origin,
-                   gameobject.transform.rotation, color);
-
-    rect = {rect_dest.x - new_origin.x, rect_dest.y - new_origin.y,
-            rect_dest.width, rect_dest.height};
+    DrawTexturePro(*texture_, rect_source, rect_dest, origin_offset,
+                   gameobject->transform.rotation, color);
 
     if (debug_mode) {
-      DrawText(gameobject.name.c_str(), rect.x, rect.y - 14, 12, RED);
+      DrawText(gameobject->name.c_str(), rect.x, rect.y - 14, 12, RED);
       DrawRectangleLinesEx(rect, 1, RED);
     }
   }
@@ -64,6 +58,10 @@ class Sprite : public Engine::Core::Component {
   Engine::ResourceManager& resource_manager_ = Engine::ResourceManager::get();
   std::string path_{};
   Texture* texture_ = nullptr;
+
+  Rectangle rect_source{};
+  Rectangle rect_dest{};
+  Vector2 origin_offset{};
 };
 
 }  // namespace Component

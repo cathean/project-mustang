@@ -4,9 +4,8 @@
 
 ## Component - Sprite
 
-- [ ] Add flip horizontal/vertical property
 - [ ] Add apply shader to the sprite feature
-- [ ] Add tint color property
+- [x] Add tint color property
 
 ## Component - Particle System
 
