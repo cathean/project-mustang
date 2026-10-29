@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/component/particle_system.hpp"
 #include "engine/component/sprite.hpp"
 #include "engine/core/gameobject.hpp"
 #include "engine/scene_management/scene.hpp"
@@ -20,6 +21,11 @@ class GameplayScene : public Engine::SceneManagement::Scene {
 
     p->add_component<Mustang::PlayerController>();
     p->transform.scale = Vector2{2, 2};
+
+    auto x = create("ParticleTest");
+    auto& particle = x->add_component<::Component::ParticleSystem>();
+    particle.debug_mode = true;
+    x->transform.position = {200, 200};
   }
 
   void on_cleanup() override {}
