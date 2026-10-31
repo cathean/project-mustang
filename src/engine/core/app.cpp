@@ -33,6 +33,7 @@ void Engine::Core::App::update() {
 
     BeginDrawing();
     ClearBackground(BLUE);
+    DrawFPS(10, 10);
 
     scene_manager_.draw();
     EndDrawing();

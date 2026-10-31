@@ -25,6 +25,11 @@ class GameplayScene : public Engine::SceneManagement::Scene {
     auto x = create("ParticleTest");
     auto& particle = x->add_component<::Component::ParticleSystem>();
     particle.debug_mode = true;
+    particle.emitter.rate_over_time = 0;
+    particle.emitter.burst.time = 1.0f;
+    particle.emitter.burst.count = 10;
+    particle.shape.spawn_type = Component::BURST_SPREAD;
+    particle.start_speed = {100, 100};
     x->transform.position = {200, 200};
   }
 
