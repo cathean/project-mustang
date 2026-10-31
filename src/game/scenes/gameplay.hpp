@@ -30,6 +30,12 @@ class GameplayScene : public Engine::SceneManagement::Scene {
     particle.emitter.burst.count = 10;
     particle.shape.spawn_type = Component::BURST_SPREAD;
     particle.start_speed = {100, 100};
+    particle.lifetime = 1.0f;
+    particle.size_over_lifetime.enable = true;
+    particle.size_over_lifetime.start_value = 20.0f;
+    particle.size_over_lifetime.end_value = 0.0f;
+    particle.size_over_lifetime.duration = particle.lifetime;
+    particle.size_over_lifetime.ease_func = EaseQuadIn;
     x->transform.position = {200, 200};
   }
 

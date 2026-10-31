@@ -1,9 +1,11 @@
 #include <boost/circular_buffer.hpp>
 #include <boost/circular_buffer/base.hpp>
 #include <cmath>
+#include <functional>
 
 #include "engine/core/component.hpp"
-#include "engine/utils.hpp"
+#include "engine/util/reasings.h"
+#include "engine/util/utils.hpp"
 #include "raylib.h"
 #include "raymath.h"
 
@@ -74,6 +76,14 @@ struct ParticleShape {
   }
 };
 
+struct SizeOverLifetime {
+  bool enable = false;
+  float start_value = 0.0f;
+  float end_value = 0.0f;
+  float duration = 0.0f;
+  std::function<float(float t, float b, float c, float d)> ease_func;
+};
+
 struct Particle {
   Transform2D transform{};
   float radius;
@@ -101,6 +111,7 @@ class ParticleSystem : public Engine::Core::Component {
   int max_particles = 1000;
   ParticleEmitter emitter{};
   ParticleShape shape{};
+  SizeOverLifetime size_over_lifetime{};
 
   void set_texture(std::string path) {}
   Texture2D* get_texture() { return texture_; }
@@ -197,6 +208,15 @@ class ParticleSystem : public Engine::Core::Component {
       it->lifetime += dt;
       it->transform.position.x += it->velocity.x * dt;
       it->transform.position.y += it->velocity.y * dt;
+
+      if (size_over_lifetime.enable) {
+        float new_size = size_over_lifetime.ease_func(
+            it->lifetime, size_over_lifetime.start_value,
+            size_over_lifetime.end_value - size_over_lifetime.start_value,
+            size_over_lifetime.duration);
+
+        it->radius = new_size;
+      }
 
       if (it->lifetime >= lifetime) {
         it->alive = false;
