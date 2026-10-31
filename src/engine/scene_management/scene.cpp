@@ -1,6 +1,7 @@
 #include "scene.hpp"
 
 #include "engine/core/gameobject.hpp"
+#include "engine/util/utils.hpp"
 
 Engine::SceneManagement::Scene::Scene(std::string name)
     : name_(std::move(name)), id_(boost::uuids::random_generator()()) {};
@@ -10,16 +11,7 @@ std::string Engine::SceneManagement::Scene::get_name() { return name_; }
 
 Engine::Core::GameObject* Engine::SceneManagement::Scene::create(
     std::string name) {
-  auto go = std::make_unique<Core::GameObject>(std::move(name));
-  auto id = go->get_id();
-  go->scene = this;
-
-  auto [it, inserted] = gameobjects_.try_emplace(id, std::move(go));
-  if (!inserted) {
-    return nullptr;
-  }
-
-  return it->second.get();
+  return Utility::create_gameobject(this, name, &gameobjects_);
 }
 
 void Engine::SceneManagement::Scene::initialize() {
@@ -29,7 +21,7 @@ void Engine::SceneManagement::Scene::initialize() {
 
 void Engine::SceneManagement::Scene::update(float dt) {
   for (const auto& [id, go] : gameobjects_) {
-    if (!go->get_started()) {
+    if (!go->is_already_started()) {
       go->start();
     }
   }

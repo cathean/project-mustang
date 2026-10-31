@@ -1,7 +1,11 @@
 #pragma once
 
+#include <memory>
 #include <random>
+#include <unordered_map>
 
+#include "engine/core/gameobject.hpp"
+#include "engine/scene_management/scene.hpp"
 #include "raylib.h"
 
 namespace Engine::Utility::Random {
@@ -21,3 +25,21 @@ inline Vector2 inside_unit_circle() {
   return c;
 }
 }  // namespace Engine::Utility::Random
+
+namespace Engine::Utility {
+inline Core::GameObject* create_gameobject(
+    SceneManagement::Scene* scene, std::string name,
+    std::unordered_map<boost::uuids::uuid, std::unique_ptr<Core::GameObject>>*
+        arr) {
+  auto go = std::make_unique<Core::GameObject>(std::move(name));
+  auto id = go->get_id();
+  go->scene = scene;
+
+  auto [it, inserted] = arr->try_emplace(id, std::move(go));
+  if (!inserted) {
+    return nullptr;
+  }
+
+  return it->second.get();
+}
+}  // namespace Engine::Utility

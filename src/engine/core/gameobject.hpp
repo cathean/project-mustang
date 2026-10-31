@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <unordered_map>
 
 #include "engine/core/types.hpp"
@@ -30,7 +31,11 @@ class GameObject : public Object {
   GameObject& operator=(const GameObject&) = delete;
 
   SceneManagement::Scene* scene = nullptr;
+  GameObject* parent = nullptr;
   Transform2D transform{
+      .position = Vector2Zero(), .rotation = 0, .scale = Vector2One()};
+
+  Transform2D local_transform{
       .position = Vector2Zero(), .rotation = 0, .scale = Vector2One()};
 
   template <typename T, typename... Args>
@@ -48,9 +53,12 @@ class GameObject : public Object {
     return *static_cast<T*>(it->second.get());
   }
 
-  bool get_started();
+  GameObject* add_child(std::string name);
+
+  bool is_already_started();
 
  private:
+  std::unordered_map<boost::uuids::uuid, std::unique_ptr<GameObject>> childs_;
   std::unordered_map<boost::uuids::uuid, std::unique_ptr<Component>>
       components_;
 

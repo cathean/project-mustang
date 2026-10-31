@@ -14,15 +14,15 @@ class GameplayScene : public Engine::SceneManagement::Scene {
   ~GameplayScene() override = default;
 
   void on_initialize() override {
-    auto p = create("Player");
+    auto player = create("Player");
     auto& sprite =
-        p->add_component<::Component::Sprite>("./assets/ships/ship.png");
+        player->add_component<::Component::Sprite>("./assets/ships/ship.png");
     sprite.debug_mode = true;
 
-    p->add_component<Mustang::PlayerController>();
-    p->transform.scale = Vector2{2, 2};
+    player->add_component<Mustang::PlayerController>();
+    player->local_transform.scale = {2, 2};
 
-    auto x = create("ParticleTest");
+    auto x = player->add_child("ParticleTest");
     auto& particle = x->add_component<::Component::ParticleSystem>();
     particle.debug_mode = true;
     particle.emitter.rate_over_time = 0;
@@ -36,7 +36,6 @@ class GameplayScene : public Engine::SceneManagement::Scene {
     particle.size_over_lifetime.end_value = 0.0f;
     particle.size_over_lifetime.duration = particle.lifetime;
     particle.size_over_lifetime.ease_func = EaseQuadIn;
-    x->transform.position = {200, 200};
   }
 
   void on_cleanup() override {}
